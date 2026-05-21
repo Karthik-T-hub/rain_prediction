@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rain Prediction System</title>
+
+<!-- =====================================================
+     GOOGLE FONT
+====================================================== -->
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* =====================================================
+   IMPORT GOOGLE FONT
+====================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+/* =====================================================
+   GLOBAL STYLES
+====================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    /*
+        Full screen height
+    */
+
+    min-height:100vh;
+
+    /*
+        Professional modern font
+    */
+
+    font-family:'Poppins', sans-serif;
+
+    /*
+        Online weather background image
+    */
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.55)
+    ),
+
+    url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?q=80&w=1974&auto=format&fit=crop');
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-attachment:fixed;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:20px;
+}
+
+
+/* =====================================================
+   MAIN CARD
+====================================================== */
+
+.container{
+
+    width:100%;
+    max-width:470px;
+
+    /*
+        Professional card
+    */
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:35px;
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,0.35);
+
+    animation:fadeIn 0.8s ease;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+
+/*
+    Top blue design line
+*/
+
+.container::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:7px;
+
+    background:linear-gradient(
+        90deg,
+        #2563eb,
+        #38bdf8
+    );
+}
+
+
+/* =====================================================
+   TOP WEATHER IMAGE
+====================================================== */
+
+.weather-image{
+
+    width:130px;
+
+    display:block;
+
+    margin:0 auto 15px auto;
+
+    filter:drop-shadow(0 8px 15px rgba(0,0,0,0.2));
+
+    animation:float 3s ease-in-out infinite;
+}
+
+
+/*
+    Floating animation
+*/
+
+@keyframes float{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-10px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+
+}
+
+
+/* =====================================================
+   HEADINGS
+====================================================== */
+
+h1{
+
+    text-align:center;
+
+    font-size:34px;
+
+    color:#0f172a;
+
+    margin-bottom:8px;
+
+    font-weight:700;
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#64748b;
+
+    margin-bottom:30px;
+
+    font-size:14px;
+
+    line-height:1.6;
+}
+
+
+/* =====================================================
+   INPUT GROUPS
+====================================================== */
+
+.input-group{
+
+    margin-bottom:22px;
+}
+
+
+/*
+    Labels
+*/
+
+label{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-bottom:10px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    color:#1e293b;
+}
+
+
+/*
+    Input fields
+*/
+
+input{
+
+    width:100%;
+
+    padding:15px 18px;
+
+    border:2px solid #e2e8f0;
+
+    border-radius:15px;
+
+    outline:none;
+
+    font-size:15px;
+
+    background:#f8fafc;
+
+    transition:0.3s;
+}
+
+
+/*
+    Placeholder
+*/
+
+input::placeholder{
+
+    color:#94a3b8;
+}
+
+
+/*
+    Input focus effect
+*/
+
+input:focus{
+
+    border-color:#3b82f6;
+
+    background:white;
+
+    box-shadow:
+    0 0 15px rgba(59,130,246,0.18);
+}
+
+
+/* =====================================================
+   BUTTON
+====================================================== */
+
+button{
+
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    margin-top:5px;
+}
+
+
+/*
+    Button hover
+*/
+
+button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 10px 25px rgba(37,99,235,0.35);
+}
+
+
+/* =====================================================
+   RESULT BOX
+====================================================== */
+
+.result{
+
+    margin-top:28px;
+
+    padding:25px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    display:none;
+
+    animation:fadeIn 0.5s ease;
+}
+
+
+/*
+    Rain Result
+*/
+
+.rainy{
+
+    background:
+    linear-gradient(
+        135deg,
+        #dbeafe,
+        #bfdbfe
+    );
+
+    color:#1e3a8a;
+
+    border:1px solid #93c5fd;
+}
+
+
+/*
+    Sunny Result
+*/
+
+.sunny{
+
+    background:
+    linear-gradient(
+        135deg,
+        #dcfce7,
+        #bbf7d0
+    );
+
+    color:#166534;
+
+    border:1px solid #86efac;
+}
+
+
+/*
+    Result Image
+*/
+
+.result img{
+
+    width:100px;
+
+    margin-bottom:12px;
+}
+
+
+/*
+    Result heading
+*/
+
+.result h2{
+
+    margin-bottom:10px;
+
+    font-size:25px;
+}
+
+
+/*
+    Result message
+*/
+
+.result p{
+
+    font-size:14px;
+
+    line-height:1.7;
+}
+
+
+/* =====================================================
+   FOOTER
+====================================================== */
+
+.footer{
+
+    text-align:center;
+
+    margin-top:28px;
+
+    color:#94a3b8;
+
+    font-size:13px;
+}
+
+
+/* =====================================================
+   FADE ANIMATION
+====================================================== */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0px);
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE RESPONSIVE
+====================================================== */
+
+@media(max-width:500px){
+
+    .container{
+
+        padding:28px 22px;
+    }
+
+    h1{
+
+        font-size:28px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     MAIN CONTAINER
+====================================================== -->
+
+<div class="container">
+
+    <!-- Weather icon -->
+
+    <img
+    src="https://cdn-icons-png.flaticon.com/512/1779/1779940.png"
+    class="weather-image"
+    alt="weather icon">
+
+
+    <!-- Heading -->
+
+    <h1>Rain Prediction</h1>
+
+    <p class="subtitle">
+        AI-Based Weather Prediction System
+    </p>
+
+
+    <!-- =================================================
+         TEMPERATURE INPUT
+    ================================================== -->
+
+    <div class="input-group">
+
+        <label>🌡 Temperature (°C)</label>
+
+        <input
+        type="number"
+        id="temp"
+        placeholder="Enter temperature">
+
+    </div>
+
+
+    <!-- =================================================
+         HUMIDITY INPUT
+    ================================================== -->
+
+    <div class="input-group">
+
+        <label>💧 Humidity (%)</label>
+
+        <input
+        type="number"
+        id="humidity"
+        placeholder="Enter humidity">
+
+    </div>
+
+
+    <!-- =================================================
+         WIND SPEED INPUT
+    ================================================== -->
+
+    <div class="input-group">
+
+        <label>🌪 Wind Speed (km/h)</label>
+
+        <input
+        type="number"
+        id="wind"
+        placeholder="Enter wind speed">
+
+    </div>
+
+
+    <!-- Predict Button -->
+
+    <button onclick="predictRain()">
+        Predict Weather
+    </button>
+
+
+    <!-- =================================================
+         RESULT SECTION
+    ================================================== -->
+
+    <div class="result" id="resultBox">
+
+        <!-- Result image -->
+
+        <img id="resultImage" src="" alt="result">
+
+        <!-- Prediction text -->
+
+        <h2 id="prediction"></h2>
+
+        <!-- Message -->
+
+        <p id="message"></p>
+
+    </div>
+
+
+    <!-- Footer -->
+
+
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   MAIN PREDICTION FUNCTION
+====================================================== */
+
+function predictRain(){
+
+    /*
+        Fetching input values
+    */
+
+    let temp = parseFloat(
+        document.getElementById("temp").value
+    );
+
+    let humidity = parseFloat(
+        document.getElementById("humidity").value
+    );
+
+    let wind = parseFloat(
+        document.getElementById("wind").value
+    );
+
+
+    /*
+        Result elements
+    */
+
+    let resultBox =
+    document.getElementById("resultBox");
+
+    let prediction =
+    document.getElementById("prediction");
+
+    let message =
+    document.getElementById("message");
+
+    let resultImage =
+    document.getElementById("resultImage");
+
+
+    /* =================================================
+       VALIDATION
+    ================================================== */
+
+    if(
+
+        isNaN(temp) ||
+        isNaN(humidity) ||
+        isNaN(wind)
+
+    ){
+
+        alert("Please fill all fields!");
+
+        return;
+    }
+
+
+    /* =================================================
+       SIMPLE AI / ML STYLE LOGIC
+
+       Higher humidity
+       + Higher wind speed
+       + Lower temperature
+
+       = Higher rain probability
+    ================================================== */
+
+    let score = 0;
+
+
+    /*
+        Humidity condition
+    */
+
+    if(humidity > 70){
+
+        score += 50;
+    }
+
+
+    /*
+        Wind speed condition
+    */
+
+    if(wind > 15){
+
+        score += 25;
+    }
+
+
+    /*
+        Temperature condition
+    */
+
+    if(temp < 30){
+
+        score += 25;
+    }
+
+
+    /*
+        Show result section
+    */
+
+    resultBox.style.display = "block";
+
+
+    /* =================================================
+       FINAL PREDICTION
+    ================================================== */
+
+    if(score >= 60){
+
+        /*
+            Rain Prediction
+        */
+
+        resultBox.className = "result rainy";
+
+
+        /*
+            Rain image from online
+        */
+
+        resultImage.src =
+        "https://cdn-icons-png.flaticon.com/512/3351/3351979.png";
+
+
+        prediction.innerHTML =
+        "🌧 Rain Expected";
+
+
+        message.innerHTML =
+        "High probability of rainfall today. Carry an umbrella!";
+
+
+    }else{
+
+        /*
+            Sunny Prediction
+        */
+
+        resultBox.className = "result sunny";
+
+
+        /*
+            Sunny image from online
+        */
+
+        resultImage.src =
+        "https://cdn-icons-png.flaticon.com/512/869/869869.png";
+
+
+        prediction.innerHTML =
+        "☀ No Rain Expected";
+
+
+        message.innerHTML =
+        "Weather looks clear and sunny today.";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
