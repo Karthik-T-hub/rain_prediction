@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rain Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>🌧️ Rain Prediction System</h1>
+
+    <form action="/predict" method="post">
+        <input type="number" name="temperature" placeholder="Temperature (°C)" required>
+        <input type="number" name="humidity" placeholder="Humidity (%)" required>
+        <input type="number" name="wind_speed" placeholder="Wind Speed (km/h)" required>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <h2>{{ prediction_text }}</h2>
+</div>
+
+</body>
+</html>
